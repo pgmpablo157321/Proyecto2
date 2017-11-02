@@ -85,36 +85,29 @@ public class Methods {
 		return camino;
 	}
 	
-	public static int[][] cutVerticalPaht(int path[], int[][]image){
-		int l=image.length;
-		int a=image[0].length;
-		int mat[][]=new int[l][a-1];
+	public static void cutVerticalPath(int path[], int[][]energy, BufferedImage img){
+		int l=energy.length;
+		int a=energy[0].length;
 		for(int i=0;i<l;i++){
-			int cont=0;
-			for(int j=0;j<a;j++){
-				if (j!=path[i]){
-					mat[i][cont]=image[i][j];
-					cont++;
-				}	
+			for(int j=path[i];j<a-1;j++){
+				energy[i][j]=energy[i][j+1];
+				img.setRGB(i, j, img.getRGB(i, j+1));
 			}
+			energy[i]=Arrays.copyOf(energy[i], a-1);
 		}
-		return mat;
+		img=img.getSubimage(0, 0, a-1, l);
 	}
 	
-	public static int[][] cutHorizontalPath(int path[], int[][]image){
-		int l=image.length;
-		int a=image[0].length;
-		int mat[][]=new int[l-1][a];
+	public static void cutHorizontalPath(int path[], int[][]energy, BufferedImage img){
+		int l=energy.length;
+		int a=energy[0].length;
 		for(int j=0;j<a;j++){
-			int cont=0;
-			for(int i=0;i<l;i++){
-				if (i!=path[j]){
-					mat[cont][j]=image[i][j];
-					cont++;
-				}	
+			for(int i=path[j];i<l-1;i++){
+				energy[i][j]=energy[i+1][j];
 			}
 		}
-		return mat;
+		energy=Arrays.copyOf(energy, l-1);
+		img=img.getSubimage(0,0,a,l-1);
 	}
 	
 	private static int function(int i, int j, Color img[][]){
