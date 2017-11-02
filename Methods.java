@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Methods {
 	
-	public static int[] verticalPath(int[][] info, boolean dir){
+	public static int[] verticalPath(int[][] info){
 		int l = info.length; //Largo
 		int m = info[0].length;//Ancho
 		int [][]Path=new int [l][m];
@@ -44,8 +44,10 @@ public class Methods {
 		}
 		return camino;
 	}
-
-	public static int[] horizontalPath(int[][]info, boolean dir){
+	
+	
+	
+	public static int[] horizontalPath(int[][]info){
 		int l = info.length; //Largo
 		int m = info[0].length;//Ancho
 		int [][]Path=new int [l][m];
@@ -85,17 +87,19 @@ public class Methods {
 		return camino;
 	}
 	
+	
+	
+	
 	public static void cutVerticalPath(int path[], int[][]energy, BufferedImage img){
 		int l=energy.length;
 		int a=energy[0].length;
 		for(int i=0;i<l;i++){
 			for(int j=path[i];j<a-1;j++){
 				energy[i][j]=energy[i][j+1];
-				img.setRGB(i, j, img.getRGB(i, j+1));
+				img.setRGB(j, i, img.getRGB(j+1, i));
 			}
 			energy[i]=Arrays.copyOf(energy[i], a-1);
 		}
-		img=img.getSubimage(0, 0, a-1, l);
 	}
 	
 	public static void cutHorizontalPath(int path[], int[][]energy, BufferedImage img){
@@ -110,37 +114,42 @@ public class Methods {
 		img=img.getSubimage(0,0,a,l-1);
 	}
 	
+	
 	private static int function(int i, int j, Color img[][]){
 		int ans=0;
 		int l=img.length;
 		int m=img[0].length;
 		int cont=0;
-		int blue = img[i][j].getBlue();
-		int red = img[i][j].getRed();
-		int green = img[i][j].getGreen(); 
 		if(i>0){
-			ans+=Math.abs(blue-img[i-1][j].getBlue());
-			ans+=Math.abs(red-img[i-1][j].getRed());
-			ans+=Math.abs(green-img[i-1][j].getGreen());
+			ans+=Math.abs(img[i][j].getBlue()-img[i-1][j].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i-1][j].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i-1][j].getGreen());
 			cont++;
-		}else if(i<l-1){
-			ans+=Math.abs(blue-img[i+1][j].getBlue());
-			ans+=Math.abs(red-img[i+1][j].getRed());
-			ans+=Math.abs(green-img[i+1][j].getGreen());
+		}
+		if(i<l-1){
+			ans+=Math.abs(img[i][j].getBlue()-img[i+1][j].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i+1][j].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i+1][j].getGreen());
 			cont++;
-		}else if(j>0){
-			ans+=Math.abs(blue-img[i][j-1].getBlue());
-			ans+=Math.abs(red-img[i][j-1].getRed());
-			ans+=Math.abs(green-img[i][j-1].getGreen());
+		}
+		if(j>0){
+			ans+=Math.abs(img[i][j].getBlue()-img[i][j-1].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i][j-1].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i][j-1].getGreen());
 			cont++;
-		}else if(j<m-1){
-			ans+=Math.abs(blue-img[i][j+1].getBlue());
-			ans+=Math.abs(red-img[i][j+1].getRed());
-			ans+=Math.abs(green-img[i][j+1].getGreen());
+		}
+		if(j<m-1){
+			ans+=Math.abs(img[i][j].getBlue()-img[i][j+1].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i][j+1].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i][j+1].getGreen());
 			cont++;
 		}
 		ans/=cont;
+		
+		
 		return ans;
+		
+		
 	}
 	
 	private static int function2(int i, int j, Color img[][]){
@@ -148,52 +157,60 @@ public class Methods {
 		int l=img.length;
 		int m=img[0].length;
 		int cont=0;
-		int blue = img[i][j].getBlue();
-		int red = img[i][j].getRed();
-		int green = img[i][j].getGreen(); 
 		if(i>0){
-			ans+=Math.abs(blue-img[i-1][j].getBlue());
-			ans+=Math.abs(red-img[i-1][j].getRed());
-			ans+=Math.abs(green-img[i-1][j].getGreen());
-			cont++;
-		}else if(i<l-1){
-			ans+=Math.abs(blue-img[i+1][j].getBlue());
-			ans+=Math.abs(red-img[i+1][j].getRed());
-			ans+=Math.abs(green-img[i+1][j].getGreen());
-			cont++;
-		}else if(j>0){
-			ans+=Math.abs(blue-img[i][j-1].getBlue());
-			ans+=Math.abs(red-img[i][j-1].getRed());
-			ans+=Math.abs(green-img[i][j-1].getGreen());
-			cont++;
-		}else if(j<m-1){
-			ans+=Math.abs(blue-img[i][j+1].getBlue());
-			ans+=Math.abs(red-img[i][j+1].getRed());
-			ans+=Math.abs(green-img[i][j+1].getGreen());
-			cont++;
-		}else if(i>0&&j>0){
-			ans+=Math.abs(blue-img[i-1][j-1].getBlue());
-			ans+=Math.abs(red-img[i-1][j-1].getRed());
-			ans+=Math.abs(green-img[i-1][j-1].getGreen());
-			cont++;
-		}else if(i>0&&j<m-1){
-			ans+=Math.abs(blue-img[i-1][j+1].getBlue());
-			ans+=Math.abs(red-img[i-1][j+1].getRed());
-			ans+=Math.abs(green-img[i-1][j+1].getGreen());
-			cont++;
-		}else if(j>0&&i<l-1){
-			ans+=Math.abs(blue-img[i+1][j-1].getBlue());
-			ans+=Math.abs(red-img[i+1][j-1].getRed());
-			ans+=Math.abs(green-img[i+1][j-1].getGreen());
-			cont++;
-		}else if(j<m-1&&i<l-1){
-			ans+=Math.abs(blue-img[i+1][j+1].getBlue());
-			ans+=Math.abs(red-img[i+1][j+1].getRed());
-			ans+=Math.abs(green-img[i+1][j+1].getGreen());
+			ans+=Math.abs(img[i][j].getBlue()-img[i-1][j].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i-1][j].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i-1][j].getGreen());
 			cont++;
 		}
+		if(i<l-1){
+			ans+=Math.abs(img[i][j].getBlue()-img[i+1][j].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i+1][j].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i+1][j].getGreen());
+			cont++;
+		}
+		if(j>0){
+			ans+=Math.abs(img[i][j].getBlue()-img[i][j-1].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i][j-1].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i][j-1].getGreen());
+			cont++;
+		}
+		if(j<m-1){
+			ans+=Math.abs(img[i][j].getBlue()-img[i][j+1].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i][j+1].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i][j+1].getGreen());
+			cont++;
+		}
+		if(i>0&&j>0){
+			ans+=Math.abs(img[i][j].getBlue()-img[i-1][j-1].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i-1][j-1].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i-1][j-1].getGreen());
+			cont++;
+		}
+		if(i>0&&j<m-1){
+			ans+=Math.abs(img[i][j].getBlue()-img[i-1][j+1].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i-1][j+1].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i-1][j+1].getGreen());
+			cont++;
+		}
+		if(j>0&&i<l-1){
+			ans+=Math.abs(img[i][j].getBlue()-img[i+1][j-1].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i+1][j-1].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i+1][j-1].getGreen());
+			cont++;
+		}
+		if(j<m-1&&i<l-1){
+			ans+=Math.abs(img[i][j].getBlue()-img[i+1][j+1].getBlue());
+			ans+=Math.abs(img[i][j].getRed()-img[i+1][j+1].getRed());
+			ans+=Math.abs(img[i][j].getGreen()-img[i+1][j+1].getGreen());
+			cont++;
+		}
+		
+		
 		ans/=cont;
-		return ans;	
+		return ans;
+		
+		
 	}
 	
 	public static int[][] energy(BufferedImage img){
@@ -203,17 +220,59 @@ public class Methods {
 		Color[][] pal=new Color[img.getHeight()][img.getWidth()];
 		for(int i=0;i<l;i++){
 			for(int j=0;j<m;j++){
-				pal[i][j]=new Color(img.getRGB(i, j));
+				pal[i][j]=new Color(img.getRGB(j, i));
 			}
 		}
 		for(int i=0;i<l;i++){
 			for(int j=0;j<m;j++){
-				e[i][j]=function(i,j, pal);
+				e[i][j]=function2(i,j, pal);
 			}
 		}
 		return e;
 	}
+
 	
-	public static void main(String[] args) {
+	public static void imprimir(int[][]a){
+
+		for(int i=0;i<a.length;i++){
+			for(int j=0;j<a[0].length;j++){
+				System.out.print(a[i][j]+" ");
+				if(a[i][j]<1000){
+					System.out.print(" ");
+				}
+				if(a[i][j]<100){
+					System.out.print(" ");
+				}
+				if(a[i][j]<10){
+					System.out.print(" ");
+				}
+			}
+			System.out.println();
+		}
+		System.out.println();
+		System.out.println();
 	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int a[][];
+		try {
+			BufferedImage img=ImageIO.read(new File("C:/Users/Asus/workspace/ImageResize/src/Image2.jpg"));
+			//imprimir(a);
+			for (int i = 0; i < 100; i++) {
+				a=energy(img);
+				cutVerticalPath(verticalPath(a),a, img);
+				img=img.getSubimage(0, 0, img.getWidth()-1, img.getHeight());
+			}
+			
+			ImageIO.write(img, "png", new File("C:/Users/Asus/workspace/ImageResize/src/Image(1).jpg"));
+			
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+		
+	}
+
 }
