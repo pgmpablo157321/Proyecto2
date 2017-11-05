@@ -3,22 +3,52 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-
 import javax.imageio.ImageIO;
 
 public class resizePicture {
 	
-	public static int[] verticalPath(int[][] info){
-		int l = info.length; //Largo
-		int m = info[0].length;//Ancho
+	private int[][]energy;
+	private BufferedImage img;
+	
+	public resizePicture(BufferedImage img) {
+		this.energy=energyFunctions.energy(img);
+		this.img=img;
+	}
+	
+	public int[][] getEnergy() {
+		return energy;
+	}
+
+	public void setEnergy(int x1, int y1, int x2, int y2, boolean p) {
+		if(p){
+			for(int i=y1;i<y2;i++){
+				for(int j=x1;j<x2;j++){
+					energy[i][j]=5000000;
+				}
+			}
+		}else{
+			for(int i=y1;i<y2;i++){
+				for(int j=x1;j<x2;j++){
+					energy[i][j]=-3000000;
+				}
+			}
+		}
+	}
+
+
+	
+
+	public int[] verticalPath(){
+		int l = this.energy.length; //Largo
+		int m = this.energy[0].length;//Ancho
 		int [][]Path=new int [l][m];
 		int [][]Path2=new int[l][m];
-		Path[0] = info[0];
+		Path[0] = this.energy[0];
 		for (int i = 1; i < l; i++) {
 			for (int j = 0; j < m; j++) {
 				int minimo = Math.min(Path[i - 1][j], Math.min(j > 0 ? Path[i - 1][j - 1] : Integer.MAX_VALUE,
 						j < m - 1 ? Path[i - 1][j + 1] : Integer.MAX_VALUE));
-				Path[i][j] = info[i][j] + minimo;
+				Path[i][j] = this.energy[i][j] + minimo;
 				if (j > 0 && Path[i - 1][j - 1] == minimo) {
 					Path2[i][j] = -1;
 				} else if (Path[i - 1][j] == minimo) {
@@ -45,20 +75,20 @@ public class resizePicture {
 		return camino;
 	}
 	
-	private static int[] horizontalPath(int[][]info){
-		int l = info.length; //Largo
-		int m = info[0].length;//Ancho
+	private int[] horizontalPath(){
+		int l = this.energy.length; //Largo
+		int m = this.energy.length;//Ancho
 		int [][]Path=new int [l][m];
 		int [][]Path2=new int[l][m];
 		for (int i = 0; i < l; i++) {
-			Path[i][0] = info[i][0];
+			Path[i][0] = this.energy[i][0];
 		}
 		for (int i=1; i<m; i++) {
 			for (int j=0; j<l; j++) {
 				int minimo = Math.min(Path[j][i-1], Math.min(j>0?Path[j-1][i-1] : Integer.MAX_VALUE,
 						j< l-1?Path[j+1][i-1]:Integer.MAX_VALUE));
 				//
-				Path[j][i] = info[j][i] + minimo;
+				Path[j][i] = this.energy[j][i] + minimo;
 				if (j > 0 && Path[j - 1][i - 1] == minimo) {
 					Path2[j][i] = -1;
 				} else if (Path[j][i - 1] == minimo) {
@@ -85,12 +115,11 @@ public class resizePicture {
 		return camino;
 	}
 	
-	public static void verticalCut(BufferedImage img, int t) throws IOException{
-		int[][]energy=energyFunctions.energy(img);
+	public void verticalCut(int t) throws IOException{
 		for(int k=0;k<t;k++){
 			int l=energy.length;
 			int a=energy[0].length;
-			int path[]=verticalPath(energy);
+			int path[]=this.verticalPath();
 			for(int i=0;i<l;i++){
 				for(int j=path[i];j<a-1;j++){
 					energy[i][j]=energy[i][j+1];
@@ -106,12 +135,11 @@ public class resizePicture {
 		
 	}
 	
-	public static void horizontalCut(BufferedImage img, int t) throws IOException{
-		int[][]energy=energyFunctions.energy(img);
+	public void horizontalCut(int t) throws IOException{
 		for(int k=0;k<t;k++){
 			int l=energy.length;
 			int a=energy[0].length;
-			int path[]= horizontalPath(energy);
+			int path[]= this.horizontalPath();
 			for(int j=0;j<a;j++){
 				for(int i=path[j];i<l-1;i++){
 					energy[i][j]=energy[i+1][j];
@@ -124,20 +152,20 @@ public class resizePicture {
 		ImageIO.write(img, "png", new File("C:/Users/Asus/workspace/ImageResize/src/Image(1).jpg"));
 	}
 	
-	public static void showVerticalPath(int[][]energy, BufferedImage img)throws IOException{
-		int path[]= verticalPath(energy);
+	public void showVerticalPath()throws IOException{
+		int path[]= verticalPath();
 		for(int i=0;i<energy.length;i++){
 			img.setRGB(path[i], i, Color.RED.getRGB());
 		}
-		ImageIO.write(img, "png", new File("C:/Users/Asus/workspace/ImageResize/src/VerticalPath.jpg"));
+		ImageIO.write(img, "jpg", new File("C:/Users/Asus/workspace/ImageResize/src/VerticalPath.jpg"));
 	}
 	
-	public static void showHorizontalPath(int[][]energy, BufferedImage img)throws IOException{
-		int path[]= horizontalPath(energy);
+	public void showHorizontalPath()throws IOException{
+		int path[]= horizontalPath();
 		for(int i=0;i<energy[0].length;i++){
 			img.setRGB(i, path[i], Color.RED.getRGB());
 		}
-		ImageIO.write(img, "png", new File("C:/Users/Asus/workspace/ImageResize/src/HorizontalPath.jpg"));
+		ImageIO.write(img, "jpg", new File("C:/Users/Asus/workspace/ImageResize/src/HorizontalPath.jpg"));
 	}
 	
 	

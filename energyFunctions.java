@@ -235,7 +235,6 @@ public class energyFunctions {
 	}
 	
 		
-	
 	public static int[][] energy(BufferedImage img){
 		int l=img.getHeight();
 		int m=img.getWidth();
