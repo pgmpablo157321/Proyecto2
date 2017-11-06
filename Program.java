@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
-public class Methods {
+public class Program {
 
 	public static void imprimir(int[][] a) {
 		for (int i = 0; i < a.length; i++) {
