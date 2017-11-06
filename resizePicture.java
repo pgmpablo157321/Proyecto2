@@ -35,10 +35,7 @@ public class resizePicture {
 		}
 	}
 
-
-	
-
-	public int[] verticalPath(){
+	private int[] verticalPath(){
 		int l = this.energy.length; //Largo
 		int m = this.energy[0].length;//Ancho
 		int [][]Path=new int [l][m];
@@ -185,3 +182,4 @@ public class resizePicture {
 	
 	
 }
+
