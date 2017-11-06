@@ -23,7 +23,7 @@ public class resizePicture {
 		if(p){
 			for(int i=y1;i<y2;i++){
 				for(int j=x1;j<x2;j++){
-					energy[i][j]=5000000;
+					energy[i][j]=300000;
 				}
 			}
 		}else{
@@ -43,19 +43,22 @@ public class resizePicture {
 		int m = this.energy[0].length;//Ancho
 		int [][]Path=new int [l][m];
 		int [][]Path2=new int[l][m];
-		Path[0] = this.energy[0];
+		for(int i=0; i<m;i++){
+			Path[0][i]=this.energy[0][i];
+		}
 		for (int i = 1; i < l; i++) {
 			for (int j = 0; j < m; j++) {
-				int minimo = Math.min(Path[i - 1][j], Math.min(j > 0 ? Path[i - 1][j - 1] : Integer.MAX_VALUE,
-						j < m - 1 ? Path[i - 1][j + 1] : Integer.MAX_VALUE));
-				Path[i][j] = this.energy[i][j] + minimo;
-				if (j > 0 && Path[i - 1][j - 1] == minimo) {
+				int minimo = Path[i-1][j];
+				Path2[i][j]=0;
+				if ((j > 0) && (Path[i - 1][j - 1]< minimo)) {
+					minimo=Path[i - 1][j - 1];
 					Path2[i][j] = -1;
-				} else if (Path[i - 1][j] == minimo) {
-					Path2[i][j] = 0;
-				} else if (j < l - 1 && Path[i - 1][j + 1] == minimo) {
+				} 
+				if ((j < m - 1) && (Path[i - 1][j + 1] < minimo)) {
+					minimo=Path[i - 1][j + 1];
 					Path2[i][j] = 1;
 				}
+				Path[i][j]=minimo+this.energy[i][j];
 			}
 		}
 		int aux = Integer.MAX_VALUE;
@@ -69,15 +72,16 @@ public class resizePicture {
 		}
 		camino[l - 1] = index;
 		for (int i = l - 2; i >= 0; i--) {
-			index = index + Path2[i + 1][index];
+			index = index + Path2[i+1][index];
 			camino[i] = index;
 		}
+		//System.out.println(aux);
 		return camino;
 	}
 	
 	private int[] horizontalPath(){
 		int l = this.energy.length; //Largo
-		int m = this.energy.length;//Ancho
+		int m = this.energy[0].length;//Ancho
 		int [][]Path=new int [l][m];
 		int [][]Path2=new int[l][m];
 		for (int i = 0; i < l; i++) {
@@ -85,17 +89,28 @@ public class resizePicture {
 		}
 		for (int i=1; i<m; i++) {
 			for (int j=0; j<l; j++) {
-				int minimo = Math.min(Path[j][i-1], Math.min(j>0?Path[j-1][i-1] : Integer.MAX_VALUE,
-						j< l-1?Path[j+1][i-1]:Integer.MAX_VALUE));
-				//
-				Path[j][i] = this.energy[j][i] + minimo;
-				if (j > 0 && Path[j - 1][i - 1] == minimo) {
-					Path2[j][i] = -1;
-				} else if (Path[j][i - 1] == minimo) {
-					Path2[j][i] = 0;
-				} else if (j < l - 1 && Path[j + 1][i - 1] == minimo) {
-					Path2[j][i] = 1;
+				int minimo=Path[j][i-1];
+				Path2[j][i]=0;
+				if((j>0)&&Path[j-1][i-1]<minimo){
+					minimo=Path[j-1][i-1];
+					Path2[j][i]=-1;
 				}
+				if((j<l-1)&&Path[j+1][i-1]<minimo){
+					minimo=Path[j+1][i-1];
+					Path2[j][i]=1;
+				}
+				Path[j][i]=this.energy[j][i]+minimo;
+//				int minimo = Math.min(Path[j][i-1], Math.min(j>0?Path[j-1][i-1] : Integer.MAX_VALUE,
+//						j< l-1?Path[j+1][i-1]:Integer.MAX_VALUE));
+//				//
+//				Path[j][i] = this.energy[j][i] + minimo;
+//				if (j > 0 && Path[j - 1][i - 1] == minimo) {
+//					Path2[j][i] = -1;
+//				} else if (Path[j][i - 1] == minimo) {
+//					Path2[j][i] = 0;
+//				} else if (j < l - 1 && Path[j + 1][i - 1] == minimo) {
+//					Path2[j][i] = 1;
+//				}
 			}
 		}
 		int aux = Integer.MAX_VALUE;
