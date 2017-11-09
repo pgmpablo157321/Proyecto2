@@ -1,22 +1,37 @@
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import java.awt.BorderLayout;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 
-public class GUI {
+public class GUI{
 
 	private JFrame frame;
 	int alto, ancho;
 	JSlider slider;
 	JSlider slider_1;
 	ImagePanel a;
+	private JButton btnGuardar;
+	BufferedImage recortada;
+	
+	float x=0;
+    float y=0;
+    float anchoo=0;
+    float altoo=0;
 	/**
 	 * Launch the application.
 	 */
@@ -24,25 +39,29 @@ public class GUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI window = new GUI();
-					window.frame.setVisible(true);
+					GUI window = new GUI(new File("/home/ssuarezz/Imágenes/Proyecto2.jpeg"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		
 	}
 
 	
-	public GUI() {
-		initialize();
+	/**
+	 * @wbp.parser.entryPoint
+	 */
+	public GUI(File f) {
+		initialize(f);
+		frame.setVisible(true);
 	}
 	
 
 	
-	private void initialize() {
-		a=new ImagePanel();
-		a.setBounds(49,51,a.getImage().getWidth()+50,a.getImage().getHeight()+50);
+	private void initialize(File f) {
+		a=new ImagePanel(new File("/home/ssuarezz/Imágenes/Proyecto2.jpeg"));
+		a.setBounds(49,51,a.getImage().getWidth()+50,a.getImage().getHeight()+70);
 		a.setLayout(null);
 		frame = new JFrame();
 		frame.setBounds(50, 50, a.getImage().getWidth()+80, a.getImage().getHeight()+150);
@@ -50,7 +69,7 @@ public class GUI {
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(a, a.getBounds());
 		
-		JButton btnRedimencionar = new JButton("Redimencionar");
+		JButton btnRedimencionar = new JButton("Redimensonar");
 		btnRedimencionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -89,8 +108,24 @@ public class GUI {
 				
 			}
 		});
-		btnRedimencionar.setBounds((a.getImage().getWidth()-60)/2, a.getImage().getHeight()+10, 136, 20);
+		btnRedimencionar.setBounds((a.getImage().getWidth()-60)/2,a.getImage().getHeight()+10,136,20);
 		a.add(btnRedimencionar);
+		
+		btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				recortada=a.getImage();
+				try {
+					ImageIO.write(recortada,"jpg", new File("Recorte de " +f.getName()));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	            JOptionPane.showMessageDialog(null, "Se ha guardado Correctamente la imagen recortada");;
+			}
+		});
+		btnGuardar.setBounds((a.getImage().getWidth()-60)/2,a.getImage().getHeight()+40,136,20);
+		a.add(btnGuardar);
 		
 		slider = new JSlider();
 		slider.setBounds(49, 12, a.getImage().getWidth(), 26);
@@ -107,4 +142,6 @@ public class GUI {
 		frame.getContentPane().add(slider_1);
 		alto=0;
 	}
+
+
 }
