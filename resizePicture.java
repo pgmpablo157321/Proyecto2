@@ -23,7 +23,7 @@ public class resizePicture {
 		if(p){
 			for(int i=y1;i<y2;i++){
 				for(int j=x1;j<x2;j++){
-					energy[i][j]=300000;
+					energy[i][j]=3000000;
 				}
 			}
 		}else{
@@ -143,9 +143,10 @@ public class resizePicture {
 		}
 		img=img.getSubimage(0, 0, img.getWidth()-t, img.getHeight());
 		
-		ImageIO.write(img, "png", new File("C:/Users/Asus/workspace/ImageResize/src/Image(1).jpg"));
+		//ImageIO.write(img, "png", new File("C:/Users/Asus/workspace/ImageResize/src/Image(1).jpg"));
 		
 	}
+	
 	
 	public void horizontalCut(int t) throws IOException{
 		for(int k=0;k<t;k++){
@@ -161,7 +162,7 @@ public class resizePicture {
 			energy=Arrays.copyOf(energy, l-1);
 		}
 		img=img.getSubimage(0,0,img.getWidth(),img.getHeight()-t);
-		ImageIO.write(img, "png", new File("C:/Users/Asus/workspace/ImageResize/src/Image(1).jpg"));
+		//ImageIO.write(img, "png", new File("C:/Users/Asus/workspace/ImageResize/src/Image(1).jpg"));
 	}
 	
 	public void showVerticalPath()throws IOException{
@@ -169,7 +170,7 @@ public class resizePicture {
 		for(int i=0;i<energy.length;i++){
 			img.setRGB(path[i], i, Color.RED.getRGB());
 		}
-		ImageIO.write(img, "jpg", new File("C:/Users/Asus/workspace/ImageResize/src/VerticalPath.jpg"));
+		//ImageIO.write(img, "jpg", new File("C:/Users/Asus/workspace/ImageResize/src/VerticalPath.jpg"));
 	}
 	
 	public void showHorizontalPath()throws IOException{
@@ -177,8 +178,21 @@ public class resizePicture {
 		for(int i=0;i<energy[0].length;i++){
 			img.setRGB(i, path[i], Color.RED.getRGB());
 		}
-		ImageIO.write(img, "jpg", new File("C:/Users/Asus/workspace/ImageResize/src/HorizontalPath.jpg"));
+		//ImageIO.write(img, "jpg", new File("C:/Users/Asus/workspace/ImageResize/src/HorizontalPath.jpg"));
 	}
+	
+	public BufferedImage getImg() {
+		return img;
+	}
+
+	public void setImg(BufferedImage img) {
+		this.img = img;
+	}
+
+	public void setEnergy(int[][] energy) {
+		this.energy = energy;
+	}
+
 	
 	
 }
