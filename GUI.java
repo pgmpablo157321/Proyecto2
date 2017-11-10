@@ -26,6 +26,9 @@ public class GUI{
 	JSlider slider_1;
 	ImagePanel a;
 	private JButton btnGuardar;
+	private JButton btnRedimencionar;
+	private JButton btnProteger;
+	private JButton btnEliminar;
 	BufferedImage recortada;
 	
 	float x=0;
@@ -39,7 +42,7 @@ public class GUI{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI window = new GUI(new File("/home/ssuarezz/Imágenes/Proyecto2.jpeg"));
+					GUI window = new GUI(new File("/home/ssuarezz/Im�genes/Proyecto2.jpeg"));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,16 +63,16 @@ public class GUI{
 
 	
 	private void initialize(File f) {
-		a=new ImagePanel(new File("/home/ssuarezz/Imágenes/Proyecto2.jpeg"));
-		a.setBounds(49,51,a.getImage().getWidth()+50,a.getImage().getHeight()+70);
+		a=new ImagePanel(f);
+		a.setBounds(49,51,a.getImage().getWidth()+50,a.getImage().getHeight()+130);
 		a.setLayout(null);
 		frame = new JFrame();
-		frame.setBounds(50, 50, a.getImage().getWidth()+80, a.getImage().getHeight()+150);
+		frame.setBounds(50, 50, a.getImage().getWidth()+80, a.getImage().getHeight()+160);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(a, a.getBounds());
 		
-		JButton btnRedimencionar = new JButton("Redimensonar");
+		btnRedimencionar = new JButton("Redimensonar");
 		btnRedimencionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
@@ -126,6 +129,30 @@ public class GUI{
 		});
 		btnGuardar.setBounds((a.getImage().getWidth()-60)/2,a.getImage().getHeight()+40,136,20);
 		a.add(btnGuardar);
+		
+		btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				a.r.setEnergy(a.selectionBounds.x, a.selectionBounds.y, a.selectionBounds.width+a.selectionBounds.x, a.selectionBounds.height+a.selectionBounds.y, false);
+				a.selectionBounds=null;
+				a.paintComponent(a.getGraphics());
+			}
+		});
+		btnEliminar.setBounds((a.getImage().getWidth()-60)/2,a.getImage().getHeight()+70,136,20);
+		a.add(btnEliminar);
+		
+		btnProteger = new JButton("Proteger");
+		btnProteger.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				a.r.setEnergy(a.selectionBounds.x, a.selectionBounds.y, a.selectionBounds.width+a.selectionBounds.x, a.selectionBounds.height+a.selectionBounds.y, true);
+				a.selectionBounds=null;
+				a.paintComponent(a.getGraphics());
+			}
+		});
+		btnProteger.setBounds((a.getImage().getWidth()-60)/2,a.getImage().getHeight()+100,136,20);
+		a.add(btnProteger);
+		
+		
 		
 		slider = new JSlider();
 		slider.setBounds(49, 12, a.getImage().getWidth(), 26);
