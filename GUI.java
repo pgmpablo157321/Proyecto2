@@ -1,5 +1,4 @@
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,19 +37,6 @@ public class GUI{
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUI window = new GUI(new File("/home/ssuarezz/Imágenes/Proyecto2.jpeg"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
-	}
-
 	
 	/**
 	 * @wbp.parser.entryPoint
@@ -67,7 +53,7 @@ public class GUI{
 		a.setBounds(49,51,a.getImage().getWidth()+50,a.getImage().getHeight()+130);
 		a.setLayout(null);
 		frame = new JFrame();
-		frame.setBounds(50, 50, a.getImage().getWidth()+80, a.getImage().getHeight()+160);
+		frame.setBounds(50, 50, a.getImage().getWidth()+80, a.getImage().getHeight()+230);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().add(a, a.getBounds());
@@ -138,7 +124,7 @@ public class GUI{
 				a.paintComponent(a.getGraphics());
 			}
 		});
-		btnEliminar.setBounds((a.getImage().getWidth()-60)/2,a.getImage().getHeight()+70,136,20);
+		btnEliminar.setBounds((a.getImage().getWidth()-350)/2,a.getImage().getHeight()+10,136,20);
 		a.add(btnEliminar);
 		
 		btnProteger = new JButton("Proteger");
@@ -149,7 +135,7 @@ public class GUI{
 				a.paintComponent(a.getGraphics());
 			}
 		});
-		btnProteger.setBounds((a.getImage().getWidth()-60)/2,a.getImage().getHeight()+100,136,20);
+		btnProteger.setBounds((a.getImage().getWidth()-350)/2,a.getImage().getHeight()+40,136,20);
 		a.add(btnProteger);
 		
 		
